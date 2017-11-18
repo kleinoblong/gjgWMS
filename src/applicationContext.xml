@@ -17,8 +17,8 @@
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl"
 			value="jdbc:mysql://thh2lzgakldp794r.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/tlnuc1luf4is5gif" />
-		<property name="user" value="root" />
-		<property name="password" value="root" />
+		<property name="user" value="wb17ghr8xks0hczj" />
+		<property name="password" value="whyetfv8akh63qcl" />
 	</bean>
 	<!-- 配置session工厂 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
