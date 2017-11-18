@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.InventoryMapper">
+	<resultMap id="InventoryResultMap" type="com.oblong.gjgwms.entity.Inventory">
+		<id column="inventory_id" jdbcType="VARCHAR" property="inventoryId" />
+		<result column="inventory_name" jdbcType="VARCHAR" property="inventoryName" />
+		<result column="inventory_amount" jdbcType="INTEGER" property="inventoryAmount" />
+		<result column="inventory_type" jdbcType="VARCHAR" property="inventoryType" />
+		<result column="inventory_min" jdbcType="INTEGER" property="inventoryMin" />
+		<result column="inventory_remark" jdbcType="VARCHAR" property="inventoryRemark" />
+		<result column="inventory_status" jdbcType="INTEGER" property="inventoryStatus" />
+	</resultMap>
+
+	<!-- 通过多条件查询，返回数据集,导出Excel用 -->
+	<select id="selectListUseDyc" parameterType="page" resultMap="InventoryResultMap">
+		select * from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+			and inventory_status=0
+		</where>
+		order by inventory_name
+	</select>
+
+	<!-- 通过多条件查询，返回库存量小于预警值的数据集,导出Excel用 -->
+	<select id="selectListUseDycMin" parameterType="page"
+		resultMap="InventoryResultMap">
+		select * from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+			and inventory_amount &lt;= inventory_min and inventory_status=0
+		</where>
+		order by inventory_name
+	</select>
+
+	<!-- 通过多条件分页查询，返回数据集 ,信息管理用 -->
+	<select id="selectPageListUseDyc" parameterType="page"
+		resultMap="InventoryResultMap">
+		select * from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+		</where>
+		order by inventory_name limit #{start},#{rows}
+	</select>
+
+	<!-- 通过多条件分页查询，返回总记录数,信息管理用 -->
+	<select id="selectPageCountUseDyc" parameterType="page"
+		resultType="Integer">
+		select count(1) from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+		</where>
+	</select>
+
+
+	<!-- 通过多条件分页查询，返回数据集 ,物资管理用 -->
+	<select id="selectPageListUseDycStatus" parameterType="page"
+		resultMap="InventoryResultMap">
+		select * from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+			and inventory_status=0
+		</where>
+		order by inventory_name limit #{start},#{rows}
+	</select>
+
+	<!-- 通过多条件分页查询，返回总记录数,物资管理用 -->
+	<select id="selectPageCountUseDycStatus" parameterType="page"
+		resultType="Integer">
+		select count(1) from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+			and inventory_status=0
+		</where>
+	</select>
+
+
+	<!-- 通过多条件分页查询，返回库存量小于预警值的数据集 ,预警用 -->
+	<select id="selectPageListUseDycMin" parameterType="page"
+		resultMap="InventoryResultMap">
+		select * from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+			and inventory_amount &lt;= inventory_min and inventory_status=0
+		</where>
+		order by inventory_name limit #{start},#{rows}
+	</select>
+
+	<!-- 通过多条件分页查询，返回库存量小于预警值的总记录数,预警用 -->
+	<select id="selectPageCountUseDycMin" parameterType="page"
+		resultType="Integer">
+		select count(1) from inventory
+		<where>
+			<if test="paramEntity.inventoryName!=null">inventory_name like #{paramEntity.inventoryName}</if>
+			and inventory_amount &lt;= inventory_min and inventory_status=0
+		</where>
+	</select>
+
+	<!-- 根据主键批量删除供物资信息 -->
+	<!-- <delete id="deleteList"> delete from inventory where inventory_Id in 
+		<foreach collection="array" open="(" separator="," close=")" item="pk"> #{pk} 
+		</foreach> </delete> -->
+
+
+	<!-- 根据主键批量修改物资状态为失效 -->
+	<update id="disable">
+		UPDATE inventory SET inventory_status=1 where inventory_id in
+		<foreach collection="array" open="(" separator="," close=")"
+			item="pk">
+			#{pk}
+		</foreach>
+	</update>
+
+	<!-- 根据主键批量修改物资状态为生效 -->
+	<update id="enable">
+		UPDATE inventory SET inventory_status=0 where inventory_id in
+		<foreach collection="array" open="(" separator="," close=")"
+			item="pk">
+			#{pk}
+		</foreach>
+	</update>
+
+	<!-- 添加物资数据,不包含数量 -->
+	<insert id="insert" parameterType="inventory">
+		insert into
+		inventory(inventory_id,inventory_name,inventory_type,inventory_min,inventory_remark)
+		values
+		(#{inventoryId},#{inventoryName},#{inventoryType},#{inventoryMin},#{inventoryRemark})
+	</insert>
+
+	<!-- 修改物资数据,不包含ID,状态,数量 -->
+	<update id="update" parameterType="inventory">
+		update inventory
+		set
+		inventory_name=#{inventoryName},inventory_type=#{inventoryType},inventory_min=#{inventoryMin},inventory_remark=#{inventoryRemark}
+		where
+		inventory_id=#{inventoryId}
+	</update>
+
+	<!-- 查询现有库存数量 -->
+	<select id="selectAmount" resultType="Integer">
+		select inventory_amount
+		from inventory where inventory_id=#{inventoryId}
+	</select>
+
+	<!-- 更新现有库存数量 -->
+	<select id="updateAmount" parameterType="inventory">
+		update inventory set
+		inventory_amount=#{inventoryAmount}
+		where
+		inventory_id=#{inventoryId}
+	</select>
+</mapper>

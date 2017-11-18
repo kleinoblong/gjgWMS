@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.Distribute_detailMapper">
+	<resultMap id="Distribute_detailResultMap" type="com.oblong.gjgwms.entity.Distribute_detail">
+		<id column="distribute_detail_id" jdbcType="VARCHAR" property="distributeDetailId" />
+		<result column="distribute_amount" jdbcType="INTEGER" property="distributeAmount" />
+		<result column="distribute_id" jdbcType="VARCHAR" property="distributeId" />
+		<result column="inventory_id" jdbcType="VARCHAR" property="inventoryId" />
+		<association property="inventory"
+			resultMap="com.oblong.gjgwms.dao.InventoryMapper.InventoryResultMap">
+			<id column="inventory_id" jdbcType="VARCHAR" property="inventoryId" />
+			<result column="inventory_name" jdbcType="VARCHAR" property="inventoryName" />
+			<result column="inventory_type" jdbcType="VARCHAR" property="inventoryType" />
+			<result column="inventory_remark" jdbcType="VARCHAR" property="inventoryRemark" />
+		</association>
+	</resultMap>
+
+<!-- 添加领用记录明细 -->
+	<insert id="insertList">
+		insert into
+		distribute_detail(distribute_detail_id,inventory_id,distribute_amount,distribute_Id)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.distributeDetailId},#{item.inventoryId},#{item.distributeAmount},#{item.distributeId})
+		</foreach>
+	</insert>
+	<!-- 返回总记录数 ,供分页明细使用 -->
+	<select id="selectPageCountUseId" parameterType="page"
+		resultType="Integer">
+		select count(1) from distribute_detail 
+		where distribute_id=
+		#{paramEntity.distributeId}
+	</select>
+	<!-- 分页查询入库记录明细 -->
+	<select id="selectPageListUseId" parameterType="page"
+		resultMap="Distribute_detailResultMap">
+		SELECT
+		i.inventory_id,i.inventory_name,i.inventory_type,i.inventory_remark,d.distribute_amount
+		from inventory i,distribute_detail d
+		where d.distribute_id=
+		#{paramEntity.distributeId} and i.inventory_id=d.inventory_id
+		limit
+		#{start},#{rows}
+	</select>
+</mapper>

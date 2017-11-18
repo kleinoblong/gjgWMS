@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.DistributeMapper">
+	<resultMap id="DistributeResultMap" type="com.oblong.gjgwms.entity.Distribute">
+		<id column="distribute_id" jdbcType="VARCHAR" property="distributeId" />
+		<result column="distribute_date" jdbcType="DATE" property="distributeDate" />
+		<association property="account"
+			resultMap="com.oblong.gjgwms.dao.AccountMapper.AccountResultMap">
+			<id column="acc_id" jdbcType="VARCHAR" property="accId" />
+			<result column="acc_name" jdbcType="VARCHAR" property="accName" />
+		</association>
+		<association property="employee"
+			resultMap="com.oblong.gjgwms.dao.EmployeeMapper.EmployeeResultMap">
+			<id column="employee_id" jdbcType="VARCHAR" property="employeeId" />
+			<result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+		</association>
+	</resultMap>
+
+	<!-- 添加领用记录 -->
+	<insert id="insert" parameterType="distribute">
+		insert into
+		distribute(distribute_id,acc_id,distribute_date,employee_id)
+		values
+		(#{distributeId},#{account.accId},#{distributeDate},#{employee.employeeId})
+	</insert>
+	
+	<!-- 分页查询领用记录表 -->
+	<select id="selectPageList" parameterType="page" resultMap="DistributeResultMap">
+		SELECT d.distribute_id,d.distribute_date,a.acc_name,e.employee_name FROM distribute d,account a,employee e 
+		WHERE a.acc_id=d.acc_id and d.employee_id=e.employee_id
+		order by d.distribute_date limit #{start},#{rows}
+	</select>
+	<!-- 返回总记录数 ,供分页查询使用-->
+	<select id="selectPageCount" resultType="Integer">
+		select count(1) from distribute
+	</select>
+</mapper>

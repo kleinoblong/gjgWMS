@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.DepartmentMapper">
+	<resultMap id="DepartmentResultMap" type="com.oblong.gjgwms.entity.Department">
+		<id column="department_id" jdbcType="VARCHAR" property="departmentId" />
+		<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+	</resultMap>
+	<!-- 插入部门 -->
+	<insert id="insert">
+		insert into department(department_id,department_name)
+		values (#{departmentId},#{departmentName})
+	</insert>
+	<!-- 删除部门 -->
+	<delete id="delete" parameterType="String">
+		delete from department where
+		department_id=#{id}
+	</delete>
+
+	<!-- 查询指定部门的员工数量 -->
+	<select id="selectCount" parameterType="String" resultType="Integer">
+		select count(1) from
+		employee where department_id=#{id}
+	</select>
+
+	<!-- 修改部门信息 -->
+	<update id="update" parameterType="Department">
+		update department set
+		department_name=#{departmentName} where department_id=#{departmentId}
+	</update>
+
+	<!-- 通过分页查询，返回数据集 -->
+	<select id="selectPageList" parameterType="page" resultMap="DepartmentResultMap">
+		select * from department order by department_name limit
+		#{start},#{rows}
+	</select>
+
+	<!-- 通过分页查询，返回总记录数 -->
+	<select id="selectPageCount" resultType="Integer">
+		select count(1) from
+		department
+	</select>
+	
+	<select id="select" resultMap="DepartmentResultMap">
+		select * from department order by department_name
+	</select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.AccountMapper">
+	<resultMap id="AccountResultMap" type="com.oblong.gjgwms.entity.Account">
+		<id column="acc_id" jdbcType="VARCHAR" property="accId" />
+		<result column="acc_loginName" jdbcType="VARCHAR" property="accLoginname" />
+		<result column="acc_name" jdbcType="VARCHAR" property="accName" />
+		<result column="acc_pwd" jdbcType="VARCHAR" property="accPwd" />
+	</resultMap>
+	<!-- 用户登录 -->
+	<select id="login" parameterType="Account" resultMap="AccountResultMap">
+		select *
+		from account where acc_loginName=#{accLoginname} and acc_pwd=#{accPwd}		
+	</select>
+	<!-- 更改密码 -->
+	<update id="updatePwd" parameterType="Account">
+		update account set acc_pwd=#{accPwd} where acc_id=#{accId}
+	</update>
+</mapper>

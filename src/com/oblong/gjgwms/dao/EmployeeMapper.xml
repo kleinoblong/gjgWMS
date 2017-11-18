@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.EmployeeMapper">
+	<resultMap id="EmployeeResultMap" type="com.oblong.gjgwms.entity.Employee">
+		<id column="employee_id" jdbcType="VARCHAR" property="employeeId" />
+		<result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+		<result column="employee_status" jdbcType="INTEGER" property="employeeStatus" />
+		<association property="department"
+			resultMap="com.oblong.gjgwms.dao.DepartmentMapper.DepartmentResultMap">
+			<id column="department_id" jdbcType="VARCHAR" property="departmentId" />
+			<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+		</association>
+	</resultMap>
+
+	<!-- 插入人员 -->
+	<insert id="insert" parameterType="employee">
+		insert into employee
+		(employee_id,employee_name,department_id)
+		values
+		(#{employeeId},#{employeeName},#{department.departmentId})
+	</insert>
+
+	<!-- 根据主键批量修改人员状态为失效 -->
+	<update id="disable">
+		UPDATE employee SET employee_status=1 where employee_Id in
+		<foreach collection="array" open="(" separator="," close=")"
+			item="pk">
+			#{pk}
+		</foreach>
+	</update>
+
+	<!-- 根据主键批量修改人员状态为生效 -->
+	<update id="enable">
+		UPDATE employee SET employee_status=0 where employee_Id in
+		<foreach collection="array" open="(" separator="," close=")"
+			item="pk">
+			#{pk}
+		</foreach>
+	</update>
+
+	<!-- 修改人员信息,不包括ID和状态 -->
+	<update id="update" parameterType="employee">
+		update employee set
+		employee_name=#{employeeName},department_id=#{department.departmentId}
+		where
+		employee_id=#{employeeId}
+	</update>
+
+	<!-- 通过多条件分页查询，返回数据集 -->
+	<select id="selectPageListUseDyc" parameterType="page"
+		resultMap="EmployeeResultMap">
+		SELECT
+		e.employee_id,e.employee_name,e.employee_status,d.department_name FROM
+		employee e,department d
+		<where>
+			<if test="paramEntity.employeeName!=null">employee_name like #{paramEntity.employeeName}</if>
+			and e.department_id=d.department_id
+		</where>
+		order by d.department_name limit #{start},#{rows}
+	</select>
+
+	<!-- 通过多条件分页查询，返回总记录数 -->
+	<select id="selectPageCountUseDyc" parameterType="page"
+		resultType="Integer">
+		select count(1) from employee
+		<where>
+			<if test="paramEntity.employeeName!=null">employee_name like #{paramEntity.employeeName}</if>
+		</where>
+	</select>
+	
+		<!-- 通过多条件分页查询，返回有效数据集 -->
+	<select id="selectPageListUseDycStatus" parameterType="page"
+		resultMap="EmployeeResultMap">
+		SELECT
+		e.employee_id,e.employee_name,e.employee_status,d.department_name FROM
+		employee e,department d
+		<where>
+			<if test="paramEntity.employeeName!=null">employee_name like #{paramEntity.employeeName}</if>
+			and e.employee_status=0
+			and e.department_id=d.department_id 
+		</where>
+		order by d.department_name limit #{start},#{rows}
+	</select>
+
+	<!-- 通过多条件分页查询，返回总记录数 -->
+	<select id="selectPageCountUseDycStatus" parameterType="page"
+		resultType="Integer">
+		select count(1) from employee
+		<where>
+			<if test="paramEntity.employeeName!=null">employee_name like #{paramEntity.employeeName}</if>
+			and employee_status=0
+		</where>
+	</select>
+
+</mapper>

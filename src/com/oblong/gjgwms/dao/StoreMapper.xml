@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.StoreMapper">
+	<resultMap id="StoreResultMap" type="com.oblong.gjgwms.entity.Store">
+		<id column="store_id" jdbcType="VARCHAR" property="storeId" />
+		<result column="store_date" jdbcType="DATE" property="storeDate" />
+		<association property="account"
+			resultMap="com.oblong.gjgwms.dao.AccountMapper.AccountResultMap">
+			<id column="acc_id" property="accId" />
+			<result column="acc_name" property="accName" />
+		</association>
+	</resultMap>
+	<!-- 添加入库记录-->
+	<insert id="insert" parameterType="store">
+		insert into
+		store(store_id,acc_id,store_date)
+		values
+		(#{storeId},#{account.accId},#{storeDate})
+	</insert>
+	<!-- 分页查询入库记录表 -->
+	<select id="selectPageList" parameterType="page" resultMap="StoreResultMap">
+		SELECT s.store_id,s.store_date,a.acc_name FROM store s,account a 
+		WHERE a.acc_id=s.acc_id
+		order by s.store_date limit #{start},#{rows}
+	</select>
+	<!-- 返回总记录数 ,供分页查询使用-->
+	<select id="selectPageCount" resultType="Integer">
+		select count(1) from store
+	</select>
+</mapper>

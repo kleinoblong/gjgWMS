@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oblong.gjgwms.dao.Store_detailMapper">
+	<resultMap id="Store_detailResultMap" type="com.oblong.gjgwms.entity.Store_detail">
+		<id column="store_detail_id" jdbcType="VARCHAR" property="storeDetailId" />
+		<result column="inventory_id" jdbcType="VARCHAR" property="inventoryId" />
+		<result column="store_amount" jdbcType="INTEGER" property="storeAmount" />
+		<result column="store_Id" jdbcType="VARCHAR" property="storeId" />
+		<association property="inventory"
+			resultMap="com.oblong.gjgwms.dao.InventoryMapper.InventoryResultMap">
+			<id column="inventory_id" jdbcType="VARCHAR" property="inventoryId" />
+			<result column="inventory_name" jdbcType="VARCHAR" property="inventoryName" />
+			<result column="inventory_type" jdbcType="VARCHAR" property="inventoryType" />
+			<result column="inventory_remark" jdbcType="VARCHAR" property="inventoryRemark" />
+		</association>
+	</resultMap>
+	<!-- 添加入库记录明细 -->
+	<insert id="insertList">
+		insert into
+		store_detail(store_detail_id,inventory_id,store_amount,store_Id)
+		values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.storeDetailId},#{item.inventoryId},#{item.storeAmount},#{item.storeId})
+		</foreach>
+	</insert>
+	<!-- 返回总记录数 ,供分页明细使用 -->
+	<select id="selectPageCountUseId" parameterType="page"
+		resultType="Integer">
+		select count(1) from store_detail 
+		where store_id=
+		#{paramEntity.storeId}
+	</select>
+	<!-- 分页查询入库记录明细 -->
+	<select id="selectPageListUseId" parameterType="page"
+		resultMap="Store_detailResultMap">
+		SELECT
+		i.inventory_id,i.inventory_name,i.inventory_type,i.inventory_remark,d.store_amount
+		from inventory i,store_detail d
+		where d.store_id=
+		#{paramEntity.storeId} and i.inventory_id=d.inventory_id
+		limit
+		#{start},#{rows}
+	</select>
+</mapper>
