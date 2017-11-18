@@ -124,7 +124,7 @@ public class InventoryAction extends BaseAction {
 		try {
 			response.setContentType("application/x-excel");
 			response.setHeader("Content-Disposition",
-					"attachment;filename= " + new String("库存列表.xls".getBytes(), "ISO-8859-1"));
+					"attachment;filename= " + new String("库存列表.xls".getBytes(), "UTF-8"));
 			ServletOutputStream outputStream = response.getOutputStream();
 			inventoryService.exportExcel(list, outputStream);
 			if (outputStream != null) {
@@ -144,7 +144,7 @@ public class InventoryAction extends BaseAction {
 		try {
 			response.setContentType("application/x-excel");
 			response.setHeader("Content-Disposition",
-					"attachment;filename= " + new String("库存预警列表.xls".getBytes(), "ISO-8859-1"));
+					"attachment;filename= " + new String("库存预警列表.xls".getBytes(), "UTF-8"));
 			ServletOutputStream outputStream = response.getOutputStream();
 			inventoryService.exportExcel(list, outputStream);
 			if (outputStream != null) {
