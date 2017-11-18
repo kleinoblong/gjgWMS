@@ -1,5 +1,7 @@
 package com.oblong.gjgwms.action;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,10 +23,13 @@ public class InventoryAction extends BaseAction {
 	private InventoryService inventoryService;
 
 	private String inventoryName = null;
+	
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	String date = df.format(new Date());
 
 	// 通过关键字分页查询所有条目
 	@RequestMapping("/selectPageUseDyc")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object selectPageUseDyc(Page<Inventory> page, Inventory inventory) {
 		page.setParamEntity(inventory);
 		inventoryName = page.getParamEntity().getInventoryName();
@@ -34,7 +39,7 @@ public class InventoryAction extends BaseAction {
 
 	// 通过关键字分页查询生效条目
 	@RequestMapping("/selectPageUseDycStatus")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object selectPageUseDycStatus(Page<Inventory> page, Inventory inventory) {
 		page.setParamEntity(inventory);
 		inventoryName = page.getParamEntity().getInventoryName();
@@ -43,26 +48,18 @@ public class InventoryAction extends BaseAction {
 	}
 	// 通过关键字分页查询库存小于预警值的集合
 	@RequestMapping("/selectPageUseDycMin")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object selectPageUseDycMin(Page<Inventory> page, Inventory inventory) {
 		page.setParamEntity(inventory);
 		inventoryName = page.getParamEntity().getInventoryName();
 		Page<Inventory> p = inventoryService.selectPageUseDycMin(page);
 		return p.getPageMap();
 	}
-	// 通过批量删除
-	/*
-	 * @RequestMapping("/deleteList")
-	 * 
-	 * @ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境 public Object
-	 * deleteList(String[] pks) { int i = 0; try { i =
-	 * inventoryService.deleteList(pks); } catch (Exception e) { // TODO
-	 * Auto-generated catch block e.printStackTrace(); } return i; }
-	 */
+
 
 	// 通过批量修改物资状态为失效
 	@RequestMapping("/disable")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object disable(String[] pks) {
 		int i = 0;
 		try {
@@ -75,7 +72,7 @@ public class InventoryAction extends BaseAction {
 
 	// 通过批量修改物资状态为生效
 	@RequestMapping("/enable")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object enable(String[] pks) {
 		int i = 0;
 		try {
@@ -88,7 +85,7 @@ public class InventoryAction extends BaseAction {
 
 	// 添加物资数据(不包括数量)
 	@RequestMapping("/insert")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object insert(Inventory inventory) {
 		int i = 0;
 		try {
@@ -102,7 +99,7 @@ public class InventoryAction extends BaseAction {
 
 	// 修改物资数据(不包括ID,状态,数量)
 	@RequestMapping("/update")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object update(Inventory inventory) {
 		int i = 0;
 		System.out.println("--------InventoryAction.update()--------"+inventory);
@@ -124,7 +121,7 @@ public class InventoryAction extends BaseAction {
 		try {
 			response.setContentType("application/x-excel");
 			response.setHeader("Content-Disposition",
-					"attachment;filename= " + new String("库存列表.xls".getBytes(), "UTF-8"));
+					"attachment;filename= " + date+"wzlb.xls");
 			ServletOutputStream outputStream = response.getOutputStream();
 			inventoryService.exportExcel(list, outputStream);
 			if (outputStream != null) {
@@ -135,7 +132,7 @@ public class InventoryAction extends BaseAction {
 		}
 	}
 
-	// 导出物资列表
+	// 导出物资预警列表
 	@RequestMapping("/exportWaringExcel")
 	public void exportWaringExcel(Page<Inventory> page, Inventory inventory, HttpServletResponse response) {
 		page.setParamEntity(inventory);
@@ -144,7 +141,7 @@ public class InventoryAction extends BaseAction {
 		try {
 			response.setContentType("application/x-excel");
 			response.setHeader("Content-Disposition",
-					"attachment;filename= " + new String("库存预警列表.xls".getBytes(), "UTF-8"));
+					"attachment;filename= " + date+"yjlb.xls");
 			ServletOutputStream outputStream = response.getOutputStream();
 			inventoryService.exportExcel(list, outputStream);
 			if (outputStream != null) {
