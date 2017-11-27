@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,30 +31,44 @@ public class InventoryAction extends BaseAction {
 	// 通过关键字分页查询所有条目
 	@RequestMapping("/selectPageUseDyc")
 	@ResponseBody 
-	public Object selectPageUseDyc(Page<Inventory> page, Inventory inventory) {
-		page.setParamEntity(inventory);
-		inventoryName = page.getParamEntity().getInventoryName();
-		Page<Inventory> p = inventoryService.selectPageUseDyc(page);
-		return p.getPageMap();
+	public Object selectPageUseDyc(Page<Inventory> page, Inventory inventory,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(inventory);
+			inventoryName = page.getParamEntity().getInventoryName();
+			Page<Inventory> p = inventoryService.selectPageUseDyc(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}	
 	}
 
 	// 通过关键字分页查询生效条目
 	@RequestMapping("/selectPageUseDycStatus")
 	@ResponseBody 
-	public Object selectPageUseDycStatus(Page<Inventory> page, Inventory inventory) {
-		page.setParamEntity(inventory);
-		inventoryName = page.getParamEntity().getInventoryName();
-		Page<Inventory> p = inventoryService.selectPageUseDycStatus(page);
-		return p.getPageMap();
+	public Object selectPageUseDycStatus(Page<Inventory> page, Inventory inventory,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(inventory);
+			inventoryName = page.getParamEntity().getInventoryName();
+			Page<Inventory> p = inventoryService.selectPageUseDycStatus(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}
+		
 	}
 	// 通过关键字分页查询库存小于预警值的集合
 	@RequestMapping("/selectPageUseDycMin")
 	@ResponseBody 
-	public Object selectPageUseDycMin(Page<Inventory> page, Inventory inventory) {
-		page.setParamEntity(inventory);
-		inventoryName = page.getParamEntity().getInventoryName();
-		Page<Inventory> p = inventoryService.selectPageUseDycMin(page);
-		return p.getPageMap();
+	public Object selectPageUseDycMin(Page<Inventory> page, Inventory inventory,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(inventory);
+			inventoryName = page.getParamEntity().getInventoryName();
+			Page<Inventory> p = inventoryService.selectPageUseDycMin(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}
+		
 	}
 
 
@@ -102,7 +117,6 @@ public class InventoryAction extends BaseAction {
 	@ResponseBody 
 	public Object update(Inventory inventory) {
 		int i = 0;
-		System.out.println("--------InventoryAction.update()--------"+inventory);
 		try {
 			i = inventoryService.update(inventory);
 		} catch (Exception e) {
@@ -114,41 +128,47 @@ public class InventoryAction extends BaseAction {
 	
 	// 导出物资列表
 	@RequestMapping("/exportExcel")
-	public void exportExcel(Page<Inventory> page, Inventory inventory, HttpServletResponse response) {
-		page.setParamEntity(inventory);
-		inventory.setInventoryName(inventoryName);
-		List<Inventory> list = inventoryService.selectListUseDyc(page);
-		try {
-			response.setContentType("application/x-excel");
-			response.setHeader("Content-Disposition",
-					"attachment;filename= " + date+"wzlb.xls");
-			ServletOutputStream outputStream = response.getOutputStream();
-			inventoryService.exportExcel(list, outputStream);
-			if (outputStream != null) {
-				outputStream.close();
+	public void exportExcel(Page<Inventory> page, Inventory inventory, HttpServletResponse response,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(inventory);
+			inventory.setInventoryName(inventoryName);
+			List<Inventory> list = inventoryService.selectListUseDyc(page);
+			try {
+				response.setContentType("application/x-excel");
+				response.setHeader("Content-Disposition",
+						"attachment;filename= " + date+"wzlb.xls");
+				ServletOutputStream outputStream = response.getOutputStream();
+				inventoryService.exportExcel(list, outputStream);
+				if (outputStream != null) {
+					outputStream.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		
 	}
 
 	// 导出物资预警列表
 	@RequestMapping("/exportWaringExcel")
-	public void exportWaringExcel(Page<Inventory> page, Inventory inventory, HttpServletResponse response) {
-		page.setParamEntity(inventory);
-		inventory.setInventoryName(inventoryName);
-		List<Inventory> list = inventoryService.selectListUseDycMin(page);
-		try {
-			response.setContentType("application/x-excel");
-			response.setHeader("Content-Disposition",
-					"attachment;filename= " + date+"yjlb.xls");
-			ServletOutputStream outputStream = response.getOutputStream();
-			inventoryService.exportExcel(list, outputStream);
-			if (outputStream != null) {
-				outputStream.close();
+	public void exportWaringExcel(Page<Inventory> page, Inventory inventory, HttpServletResponse response,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(inventory);
+			inventory.setInventoryName(inventoryName);
+			List<Inventory> list = inventoryService.selectListUseDycMin(page);
+			try {
+				response.setContentType("application/x-excel");
+				response.setHeader("Content-Disposition",
+						"attachment;filename= " + date+"yjlb.xls");
+				ServletOutputStream outputStream = response.getOutputStream();
+				inventoryService.exportExcel(list, outputStream);
+				if (outputStream != null) {
+					outputStream.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+
 	}
 }

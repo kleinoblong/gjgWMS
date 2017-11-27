@@ -1,6 +1,8 @@
 package com.oblong.gjgwms.action;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +20,7 @@ public class DepartmentAction extends BaseAction {
 
 	// 添加物资数据(不包括数量)
 	@RequestMapping("/insert")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object insert(Department department) {
 		int i = 0;
 		try {
@@ -32,25 +34,28 @@ public class DepartmentAction extends BaseAction {
 
 	// 通过查询所有条目
 	@RequestMapping("/select")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object select() {
-		System.out.println("DepartmentAction.select()-----------"+departmentService.select());
 		return departmentService.select();
 	}
 	
 	// 通过分页查询所有条目
 	@RequestMapping("/selectPage")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
-	public Object selectPage(Page<Department> page, Department department) {
-		page.setParamEntity(department);
-		Page<Department> p = departmentService.selectPage(page);
-		System.out.println("----------DepartmentAction.selectPage()+p-----------"+p);
-		return p.getPageMap();
+	@ResponseBody 
+	public Object selectPage(Page<Department> page, Department department,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(department);
+			Page<Department> p = departmentService.selectPage(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}	
+		
 	}
 
 	// 修改部门数据(不包括ID)
 	@RequestMapping("/update")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object update(Department department) {
 		int i = 0;	
 		try {
@@ -63,7 +68,7 @@ public class DepartmentAction extends BaseAction {
 	
 	// 修改部门数据(不包括ID)
 	@RequestMapping("/delete")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object delete(String pk) {
 		int i = 0;	
 		System.out.println(pk);
@@ -79,7 +84,7 @@ public class DepartmentAction extends BaseAction {
 	
 	// 
 	@RequestMapping("/selectCount")
-	@ResponseBody // 如果返回json格式，需要这个注解，这里用来测试环境
+	@ResponseBody 
 	public Object selectCount(String id) {
 		int i = 0;	
 		try {

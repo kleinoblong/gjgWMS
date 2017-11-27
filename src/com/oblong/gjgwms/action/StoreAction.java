@@ -83,10 +83,15 @@ public class StoreAction extends BaseAction {
 	 */
 	@RequestMapping("/selectPage")
 	@ResponseBody
-	public Object selectPage(Page<Store> page, Store store) {
-		page.setParamEntity(store);
-		Page<Store> p = storeService.selectPage(page);
-		return p.getPageMap();
+	public Object selectPage(Page<Store> page, Store store,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(store);
+			Page<Store> p = storeService.selectPage(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}	
+		
 	}
 	
 	/**

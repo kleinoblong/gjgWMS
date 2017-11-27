@@ -73,10 +73,15 @@ public class DistributeAcction extends BaseAction {
 	
 	@RequestMapping("/selectPage")
 	@ResponseBody
-	public Object selectPage(Page<Distribute> page, Distribute distribute) {
-		page.setParamEntity(distribute);
-		Page<Distribute> p = distributeService.selectPage(page);
-		return p.getPageMap();
+	public Object selectPage(Page<Distribute> page, Distribute distribute,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(distribute);
+			Page<Distribute> p = distributeService.selectPage(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}	
+		
 	}
 	
 	@RequestMapping("/selectPageUseId")

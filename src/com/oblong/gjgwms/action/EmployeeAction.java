@@ -1,5 +1,7 @@
 package com.oblong.gjgwms.action;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,10 +17,14 @@ public class EmployeeAction extends BaseAction {
 	// 通过关键字分页查询所有条目
 	@RequestMapping("/selectPageUseDyc")
 	@ResponseBody 
-	public Object selectPageUseDyc(Page<Employee> page, Employee employee) {
-		page.setParamEntity(employee);
-		Page<Employee> p = employeeService.selectPageUseDyc(page);
-		return p.getPageMap();
+	public Object selectPageUseDyc(Page<Employee> page, Employee employee,HttpSession session) {
+		if(session.getAttribute("account")!=null){
+			page.setParamEntity(employee);
+			Page<Employee> p = employeeService.selectPageUseDyc(page);
+			return p.getPageMap();
+		}else{
+			return null;
+		}	
 	}
 	// 通过批量修改物资状态为失效
 	@RequestMapping("/disable")
@@ -63,7 +69,6 @@ public class EmployeeAction extends BaseAction {
 	public Object update(Employee employee,Department department) {
 		int i = 0;
 		employee.setDepartment(department);
-		System.out.println("_____________EmployeeAction.insert()___________"+employee);
 		try {
 			i = employeeService.update(employee);
 		} catch (Exception e) {
