@@ -5,6 +5,16 @@
 <head>
 <title>物资领用</title>
 <script type="text/javascript">
+	//得到当前日期
+	formatterDate = function(date) {
+		var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
+		var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
+		+ (date.getMonth() + 1);
+		return date.getFullYear() + '-' + month + '-' + day;
+	};
+	window.onload = function() {
+		$('#distributeDate').datebox('setValue', formatterDate(new Date()));
+	};
 	$(function() {
 		//变量用来支持单元格编辑时使用
 		var editIndex = undefined;

@@ -5,6 +5,16 @@
 <head>
 <title>物资入库</title>
 <script type="text/javascript">
+	//得到当前日期
+	formatterDate = function(date) {
+		var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
+		var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
+		+ (date.getMonth() + 1);
+		return date.getFullYear() + '-' + month + '-' + day;
+	};
+	window.onload = function() {
+		$('#storeDate').datebox('setValue', formatterDate(new Date()));
+	};
 	$(function() {
 		//变量用来支持单元格编辑时使用
 		var editIndex = undefined;
@@ -21,7 +31,7 @@
 						handler : function() {
 							parent.$('#win').window(
 								{
-									title : '选择入库商品',
+									title : '选择入库物资',
 									width : 600,
 									height : 500,
 									modal : true,
@@ -96,7 +106,10 @@
 														bottom : ''
 													}
 												});
-												$("#dg").datagrid('loadData', { total: 0, rows: [] });  
+												$("#dg").datagrid('loadData', {
+													total : 0,
+													rows : []
+												});
 											} else {
 												$.messager.show({
 													title : '消息',
@@ -110,10 +123,10 @@
 													}
 												});
 											}
-											//重新刷新页面
-											//$("#dg").datagrid("selectAll");
-											//请除所有勾选的行
-											//$("#dg").datagrid("clearSelections");
+										//重新刷新页面
+										//$("#dg").datagrid("selectAll");
+										//请除所有勾选的行
+										//$("#dg").datagrid("clearSelections");
 										}
 									});
 						}
@@ -149,7 +162,7 @@
 						//alert(" onDblClickCell editIndex != undefined");			
 						$(this).datagrid('endEdit', editIndex);
 						editIndex = undefined;
-					}		
+					}
 					//设置可编辑行	
 					$(this).datagrid('beginEdit', index);
 					editIndex = index;
@@ -157,7 +170,7 @@
 					var ed = $(this).datagrid('getEditor', {
 						index : index,
 						field : field
-					});				
+					});
 					$(ed.target).focus();
 				},
 				onClickCell : function(index, field, value) {
@@ -176,9 +189,9 @@
 	<form class="myfm" style="padding:15px;margin:0px;background:#eee;"
 		id="ff" action="">
 		<div class="myfitem">
-			<label>请填写入库信息(双击数量单元格开始编辑,单击其他退出编辑)</label>
-			<label>日期：</label><input type="text" id="storeDate"
-				class="easyui-datebox" name="storeDate" required="required"></input>
+			<label>请填写入库信息(双击数量单元格开始编辑,单击其他退出编辑)</label> <label>日期：</label><input
+				type="text" id="storeDate" class="easyui-datebox" name="storeDate"
+				required="required"></input>
 		</div>
 	</form>
 	<table id="dg"></table>
