@@ -2,7 +2,7 @@
 <html>
 <head>
 <%@ include file="/common/common.jspf"%>
-<title>修改密码</title>
+<title></title>
 </head>
 <script type="text/javascript">
 	$(function() {

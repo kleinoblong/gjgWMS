@@ -63,7 +63,7 @@
 									timeout : 1000,
 									style : {
 										right : '',
-										top : document.body.scrollTop + document.documentElement.scrollTop,
+										top : document.body.scrollTop + document.documentElement.scrollTop+200,
 										bottom : ''
 									}
 								});
@@ -102,7 +102,7 @@
 													timeout : 1000,
 													style : {
 														right : '',
-														top : document.body.scrollTop + document.documentElement.scrollTop,
+														top : document.body.scrollTop + document.documentElement.scrollTop+200,
 														bottom : ''
 													}
 												});
@@ -118,7 +118,7 @@
 													timeout : 1000,
 													style : {
 														right : '',
-														top : document.body.scrollTop + document.documentElement.scrollTop,
+														top : document.body.scrollTop + document.documentElement.scrollTop+200,
 														bottom : ''
 													}
 												});

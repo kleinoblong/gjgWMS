@@ -3,6 +3,11 @@
 <%@include file="/common/common.jspf"%>
 <html>
 <head>
+<style type="text/css">
+#tt .tabs-panels>.panel>.panel-body {  
+    overflow: hidden;  
+    }  
+</style>
 <title></title>
 <script type="text/javascript">
 	$(function() {
@@ -17,6 +22,7 @@
 			} else {
 				$('#tt').tabs('add', {
 					title : this.title,
+					fit  : true,
 					//面板有关闭按键
 					closable : true,
 					//href对远程页面js的支持不好 
@@ -30,7 +36,7 @@
 	});
 </script>
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout"  data-options="fit : true,border : false">
 	<!-- 头部 -->
 	<div
 		data-options="region:'north',title:'中铁十五局集团物资工程有限公司钢结构厂-库房管理系统',split:false"
@@ -112,7 +118,7 @@
 	</div>
 
 	<div data-options="region:'center',title:'主要信息'"
-		style="padding:5px;background:#eee;">
+		style="padding:5px;background:#eee;overflow:hidden;">
 		<div id="tt" class="easyui-tabs" data-options="fit:true"
 			style="width:500px;height:250px;">
 			<div title="系统介绍" style="padding:20px;">
@@ -124,6 +130,6 @@
 
 		</div>
 	</div>
-	<div id="win"></div>
+	<div id="win" style="overflow-x: hidden;overflow-y: hidden;"></div>
 </body>
 </html>

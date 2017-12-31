@@ -4,10 +4,10 @@
 <%@ include file="/common/common.jspf"%>
 <title></title>
 </head>
-<body class="mybody">
+<body class="mybody" style="overflow: hidden;">
 
 	<form id="ff" class="myfm" method="post"
-		style="width: 480px;height:100%;">
+		style="width: 100%;height:100%;">
 		<div class="myftitle">请输入物资信息:</div>
 
 		<div class="myfitem">
@@ -26,7 +26,6 @@
 			<label for="inventoryRemark">备注信息:</label> <input type="text"
 				name="inventoryRemark" style="width: 260px;" />
 		</div>
-		<br>
 		<div class="myfitem" style="text-align:center;">
 			<a id="btn" href="#" class="easyui-linkbutton">提交</a> <a id="btn2"
 				href="#" class="easyui-linkbutton"
@@ -40,11 +39,11 @@
 	
 			$("[name='inventoryName']").validatebox({
 				required : true,
-				missingMessage : '请填写物资名称！'
+				missingMessage : '必填项！'
 			});
 			$("[name='inventoryMin']").validatebox({
 				required : true,
-				missingMessage : '请填写库存预警数量！'
+				missingMessage : '必填项！'
 			});
 			//禁用验证
 			$("#ff").form("disableValidation");

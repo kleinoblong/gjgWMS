@@ -31,7 +31,7 @@
 							timeout : 1000,
 							style : {
 								right : '',
-								top : document.body.scrollTop + document.documentElement.scrollTop,
+								top : document.body.scrollTop + document.documentElement.scrollTop+200,
 								bottom : ''
 							}
 						});
@@ -62,7 +62,6 @@
 					formatter : function(value, row, index) {
 						var unixTimestamp = new Date(value);
 						return unixTimestamp.toLocaleString().substring(0, 17);
-						;
 					}
 				}, {
 					field : 'account',
@@ -74,7 +73,7 @@
 				}, {
 					field : 'employee',
 					title : '领用人',
-					width : 100,
+					width : 200,
 					formatter : function(value, row, index) {
 						return row.employee.employeeName;
 					}

@@ -4,10 +4,10 @@
 <%@ include file="/common/common.jspf"%>
 <title>添加部门数据</title>
 </head>
-<body class="mybody">
+<body class="mybody" style="overflow: hidden;">
 
 	<form id="ff" class="myfm" method="post"
-		style="width: 480px;height:100%;">
+		style="width: 100%;height:100%;">
 		<div class="myftitle">请输入部门信息:</div>
 
 		<div class="myfitem">
@@ -27,7 +27,7 @@
 	
 			$("[name='departmentName']").validatebox({
 				required : true,
-				missingMessage : '请填写部门名称！'
+				missingMessage : '必填项！'
 			});
 			//禁用验证
 			$("#ff").form("disableValidation");

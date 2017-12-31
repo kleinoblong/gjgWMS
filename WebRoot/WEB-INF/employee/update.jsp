@@ -4,9 +4,9 @@
 <%@ include file="/common/common.jspf"%>
 <title>更改人员信息</title>
 </head>
-<body class="mybody">
+<body class="mybody" style="overflow: hidden;">
 	<form id="ff" class="myfm" method="post"
-		style="width: 480px;height:100%;">
+		style="width: 100%;height:100%;">
 		<div class="myftitle">请输入人员信息:</div>
 		<input type="hidden" name="employeeId">
 		<div class="myfitem">
@@ -17,6 +17,8 @@
 			<label for="departmentId">所属部门:</label> <input type="text" id="departmentId"
 				name="departmentId" style="width: 260px;" />
 		</div>
+		<br>
+		<br>
 		<div class="myfitem" style="text-align:center;">
 			<a id="btn" href="#" class="easyui-linkbutton">提交</a> <a id="btn2"
 				href="#" class="easyui-linkbutton"
@@ -33,7 +35,7 @@
 			});
 			$("[name='employeeName']").validatebox({
 				required : true,
-				missingMessage : '请填写人员姓名！'
+				missingMessage : '必填项！'
 			});
 			$("[name='departmentId']").validatebox({
 				required : true

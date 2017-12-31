@@ -8,6 +8,7 @@
 	margin: -3
 }
 </style>
+
 <script type="text/javascript">
 	$(function() {
 	var curTabWin = null;
@@ -36,12 +37,12 @@
 					if (row == null) {
 						$.messager.show({
 									title : '消息',
-									msg : '请选择需要入库的物资!',
+									msg : '请选择需要的物资!',
 									showType : 'fade',
 									timeout : 1000,
 									style : {
 										right : '',
-										top : document.body.scrollTop + document.documentElement.scrollTop,
+										top : document.body.scrollTop + document.documentElement.scrollTop+200,
 										bottom : ''
 									}
 								});
@@ -68,7 +69,7 @@
 			}, {
 				field : 'inventoryName',
 				title : '物资名称',
-				width : 150
+				width : 200
 			}, {
 				field : 'inventoryType',
 				title : '规格',
@@ -76,11 +77,11 @@
 			}, {
 				field : 'inventoryAmount',
 				title : '库存数量',
-				width : 120
+				width : 140
 			}, {
 				field : 'inventoryRemark',
 				title : '备注',
-				width : 280
+				width : 250
 			} ] ]
 		});
 		$('#inventoryName').searchbox({

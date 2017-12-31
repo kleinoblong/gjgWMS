@@ -10,6 +10,7 @@
 		$('#dg').datagrid({
 			//支持多条件查询
 			url : '${proPath}/inventory/selectPageUseDycStatus.action',
+			fitColumns : true,
 			nowrapL : true,
 			//idField:'inventoryId',
 			rownumbers : true,
@@ -81,23 +82,23 @@
 			columns : [ [{
 				field : 'inventoryName',
 				title : '物资名称',
-				width : 200
+				width : 100,
 			}, {
 				field : 'inventoryAmount',
 				title : '数量',
-				width : 100
+				width : 100,
 			}, {
 				field : 'inventoryType',
 				title : '规格',
-				width : 100
+				width : 100,
 			}, {
 				field : 'inventoryMin',
 				title : '库存预警',
-				width : 100
+				width : 100,
 			}, {
 				field : 'inventoryRemark',
 				title : '备注',
-				width : 400,
+				width : 100,
 			//align : 'right'
 			} ] ]
 		});
@@ -112,6 +113,6 @@
 	});
 </script>
 <body>
-	<table id="dg"></table>
+	<table id="dg" ></table>
 </body>
 </html>

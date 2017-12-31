@@ -23,7 +23,7 @@
 					//alert('新增按钮');
 					parent.$('#win').window({
 						title : '新增部门信息',
-						width : 520,
+						width : 430,
 						height : 120,
 						modal : true,
 						collapsible : false,
@@ -48,7 +48,7 @@
 							timeout : 1000,
 							style : {
 								right : '',
-								top : document.body.scrollTop + document.documentElement.scrollTop,
+								top : document.body.scrollTop + document.documentElement.scrollTop+200,
 								bottom : ''
 							}
 						});
@@ -58,7 +58,7 @@
 					//打开修改窗口
 					parent.$('#win').window({
 						title : '修改',
-						width : 520,
+						width : 430,
 						height : 120,
 						modal : true,
 						content : "<iframe src='${proPath}/base/goURL/department/update.action' height='100%' width='100%' frameborder='0px' ></iframe>"
@@ -92,7 +92,7 @@
 												timeout : 1000,
 												style : {
 													right : '',
-													top : document.body.scrollTop + document.documentElement.scrollTop,
+													top : document.body.scrollTop + document.documentElement.scrollTop+200,
 													bottom : ''
 												}
 											});
@@ -104,7 +104,7 @@
 												timeout : 1000,
 												style : {
 													right : '',
-													top : document.body.scrollTop + document.documentElement.scrollTop,
+													top : document.body.scrollTop + document.documentElement.scrollTop+200,
 													bottom : ''
 												}
 											});
@@ -129,7 +129,7 @@
 							timeout : 1000,
 							style : {
 								right : '',
-								top : document.body.scrollTop + document.documentElement.scrollTop,
+								top : document.body.scrollTop + document.documentElement.scrollTop+200,
 								bottom : ''
 							}
 						});
@@ -146,7 +146,7 @@
 				}, {
 					field : 'departmentName',
 					title : '部门名称',
-					width : 100
+					width : 500
 				}] ]
 		});
 	});
